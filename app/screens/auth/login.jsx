@@ -5,11 +5,24 @@ import {
   StyleSheet,
   Text,
   View,
+  TextInput,
 } from "react-native";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 
 export default function Login() {
   const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleRegister = () => {
+    if (!email.trim() || !password.trim()) {
+      return;
+    }
+    if (password !== confirmPassword) {
+      return;
+    }
+  };
   return (
     <ImageBackground
       style={styles.background}
@@ -22,6 +35,21 @@ export default function Login() {
         />
       </View>
       <View style={styles.buttonContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="E-mail"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Wachtwoord"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
         <Pressable
           style={styles.landingScreenButton}
           onPress={() => {
@@ -41,7 +69,6 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
     justifyContent: "center",
-
   },
   buttonContainer: {
     flex: 1,
@@ -81,5 +108,12 @@ const styles = StyleSheet.create({
     gap: 10,
     width: "100%",
     height: 55,
+  },
+  input: {
+    borderRadius: 10,
+    backgroundColor: "rgba(255, 255, 255, 0.83)",
+    width: "80%",
+    height: 46,
+    padding: 20,
   },
 });

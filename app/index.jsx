@@ -22,6 +22,11 @@ export default function App() {
           source={require("../assets/images/main-logo.png")}
         />
       </View>
+      <View style={styles.textContainer}>
+        <Text style={styles.landingScreenTitle}>
+          Explore a new world with us
+        </Text>
+      </View>
       <View style={styles.buttonContainer}>
         <Pressable
           style={styles.landingScreenButton}
@@ -61,6 +66,25 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     marginBottom: "100",
+  },
+  textContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    width: "100%",
+  },
+  landingScreenTitle: {
+    fontSize: 45,
+    letterSpacing: 3.2,
+    lineHeight: 55,
+    fontWeight: "700",
+    fontFamily: "Inter-Bold",
+    color: "#fff",
+    textAlign: "left",
+    width: 312,
+    height: 182,
+    marginTop: 237,
   },
   landingScreenButton: {
     borderRadius: 10,
