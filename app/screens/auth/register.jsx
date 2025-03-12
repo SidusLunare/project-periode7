@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { registerUser } from '../../../utils/localAuth';
 
 export default function Login() {
   const router = useRouter();
@@ -16,14 +17,23 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!email.trim() || !password.trim() || !confirmPassword.trim()) {
       return;
     }
     if (password !== confirmPassword) {
       return;
     }
+    try {
+      await registerUser(email, password);
+      alert('Registered successfully!');
+      // Optionally navigate to login screen or home
+      router.push('/screens/tabs/home');
+    } catch (error) {
+      alert(error.message);
+    }
   };
+
   return (
     <ImageBackground
       style={styles.background}
@@ -62,13 +72,21 @@ export default function Login() {
           style={styles.landingScreenButton}
           onPress={() => {
             handleRegister();
-            console.log("Home Redirect Button pressed");
-            router.push("/screens/tabs/home");
           }}
         >
           <Text style={styles.landingScreenText}>Register</Text>
         </Pressable>
       </View>
+      <Pressable
+        style={styles.alreadyAccountContainer}
+        onPress={() => {
+          router.push("/screens/auth/login");
+        }}
+      >
+        <Text style={styles.alreadyAccountText}>
+          Already have an account? Sign in
+        </Text>
+      </Pressable>
     </ImageBackground>
   );
 }
@@ -87,14 +105,15 @@ const styles = StyleSheet.create({
     gap: 20,
     width: "100%",
     height: "100%",
-    marginBottom: "100",
+    marginBottom: "100", // Note: original code used a string here
   },
   input: {
     borderRadius: 10,
     backgroundColor: "rgba(255, 255, 255, 0.83)",
     width: "80%",
     height: 46,
-    padding: 20,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
   },
   landingScreenButton: {
     borderRadius: 10,
@@ -124,5 +143,23 @@ const styles = StyleSheet.create({
     gap: 10,
     width: "100%",
     height: 55,
+  },
+  alreadyAccountContainer: {
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    bottom: 25,
+  },
+  alreadyAccountText: {
+    fontSize: 12,
+    letterSpacing: 0.8,
+    lineHeight: 55,
+    fontWeight: "700",
+    fontFamily: "Inter-Bold",
+    color: "#000",
+    textAlign: "left",
+    display: "flex",
+    alignItems: "center",
+    width: 224,
   },
 });

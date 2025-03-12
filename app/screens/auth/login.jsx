@@ -9,20 +9,26 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { loginUser } from '../../../utils/localAuth';
 
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRegister = () => {
+  const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
       return;
     }
-    if (password !== confirmPassword) {
-      return;
+    try {
+      await loginUser(email, password);
+      alert('Login successful!');
+      router.push('/screens/tabs/home');
+    } catch (error) {
+      alert(error.message);
     }
   };
+
   return (
     <ImageBackground
       style={styles.background}
@@ -52,14 +58,21 @@ export default function Login() {
         />
         <Pressable
           style={styles.landingScreenButton}
-          onPress={() => {
-            console.log("Home Redirect Button pressed");
-            router.push("/screens/tabs/home");
-          }}
+          onPress={handleLogin}
         >
           <Text style={styles.landingScreenText}>Login</Text>
         </Pressable>
       </View>
+      <Pressable
+        style={styles.alreadyAccountContainer}
+        onPress={() => {
+          router.push("/screens/auth/register");
+        }}
+      >
+        <Text style={styles.alreadyAccountText}>
+          Already have an account? Sign in
+        </Text>
+      </Pressable>
     </ImageBackground>
   );
 }
@@ -78,7 +91,7 @@ const styles = StyleSheet.create({
     gap: 20,
     width: "100%",
     height: "100%",
-    marginBottom: "100",
+    marginBottom: "100", // Note: original code used a string here
   },
   landingScreenButton: {
     borderRadius: 10,
@@ -114,6 +127,25 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.83)",
     width: "80%",
     height: 46,
-    padding: 20,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+  },
+  alreadyAccountContainer: {
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    bottom: 25,
+  },
+  alreadyAccountText: {
+    fontSize: 12,
+    letterSpacing: 0.8,
+    lineHeight: 55,
+    fontWeight: "700",
+    fontFamily: "Inter-Bold",
+    color: "#fff",
+    textAlign: "left",
+    display: "flex",
+    alignItems: "center",
+    width: 224,
   },
 });
