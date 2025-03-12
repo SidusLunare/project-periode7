@@ -11,7 +11,7 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { registerUser } from '../../../utils/localAuth';
 
-export default function Login() {
+export default function Register() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
