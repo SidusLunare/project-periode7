@@ -6,10 +6,11 @@ import {
   Text,
   View,
   TextInput,
+  Alert,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { registerUser } from '../../../utils/localAuth';
+import { registerUser } from "../../../utils/localAuth";
 
 export default function Register() {
   const router = useRouter();
@@ -19,18 +20,19 @@ export default function Register() {
 
   const handleRegister = async () => {
     if (!email.trim() || !password.trim() || !confirmPassword.trim()) {
+      Alert.alert("Error", "Please fill in all fields.");
       return;
     }
     if (password !== confirmPassword) {
+      Alert.alert("Error", "Passwords do not match.");
       return;
     }
     try {
-      await registerUser(email, password);
-      alert('Registered successfully!');
-      // Optionally navigate to login screen or home
-      router.push('/screens/tabs/home');
+      const result = await registerUser(email, password);
+      Alert.alert("Success", result.message);
+      router.push("/screens/tabs/home");
     } catch (error) {
-      alert(error.message);
+      Alert.alert("Registration Error", error.message);
     }
   };
 
@@ -68,12 +70,7 @@ export default function Register() {
           onChangeText={setConfirmPassword}
           secureTextEntry
         />
-        <Pressable
-          style={styles.landingScreenButton}
-          onPress={() => {
-            handleRegister();
-          }}
-        >
+        <Pressable style={styles.landingScreenButton} onPress={handleRegister}>
           <Text style={styles.landingScreenText}>Register</Text>
         </Pressable>
       </View>

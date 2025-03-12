@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -5,12 +6,43 @@ import {
   Text,
   Pressable,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
   const router = useRouter();
+  const [isChecking, setIsChecking] = useState(true);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const storedProfile = await AsyncStorage.getItem("userProfile");
+        if (storedProfile) {
+          // User is already logged in, go to home
+          router.push("/screens/tabs/home");
+        } else {
+          // No stored user, show the landing screen
+          setIsChecking(false);
+        }
+      } catch (error) {
+        console.log("Error checking AsyncStorage:", error);
+        setIsChecking(false);
+      }
+    })();
+  }, []);
+
+  if (isChecking) {
+    // Show a spinner or splash while we check
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#000" />
+      </View>
+    );
+  }
+
+  // Normal landing screen UI
   return (
     <ImageBackground
       style={styles.background}
@@ -23,15 +55,12 @@ export default function App() {
         />
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.landingScreenTitle}>
-          Explore a new world with us
-        </Text>
+        <Text style={styles.landingScreenTitle}>Explore a new world with us</Text>
       </View>
       <View style={styles.buttonContainer}>
         <Pressable
           style={styles.landingScreenButton}
           onPress={() => {
-            console.log("Register Button pressed");
             router.push("/screens/auth/register");
           }}
         >
@@ -40,7 +69,6 @@ export default function App() {
         <Pressable
           style={styles.landingScreenButton}
           onPress={() => {
-            console.log("Login Button pressed");
             router.push("/screens/auth/login");
           }}
         >
@@ -52,6 +80,11 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   background: {
     flex: 1,
     resizeMode: "cover",

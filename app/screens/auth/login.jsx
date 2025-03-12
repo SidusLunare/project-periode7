@@ -6,10 +6,11 @@ import {
   Text,
   View,
   TextInput,
+  Alert,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { loginUser } from '../../../utils/localAuth';
+import { loginUser } from "../../../utils/localAuth";
 
 export default function Login() {
   const router = useRouter();
@@ -18,14 +19,15 @@ export default function Login() {
 
   const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
+      Alert.alert("Error", "Please fill in all fields.");
       return;
     }
     try {
-      await loginUser(email, password);
-      alert('Login successful!');
-      router.push('/screens/tabs/home');
+      const result = await loginUser(email, password);
+      Alert.alert("Success", result.message);
+      router.push("/screens/tabs/home");
     } catch (error) {
-      alert(error.message);
+      Alert.alert("Login Error", error.message);
     }
   };
 
@@ -56,10 +58,7 @@ export default function Login() {
           onChangeText={setPassword}
           secureTextEntry
         />
-        <Pressable
-          style={styles.landingScreenButton}
-          onPress={handleLogin}
-        >
+        <Pressable style={styles.landingScreenButton} onPress={handleLogin}>
           <Text style={styles.landingScreenText}>Login</Text>
         </Pressable>
       </View>
