@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Image,
   ImageBackground,
@@ -9,7 +10,6 @@ import {
   Alert,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { useState } from "react";
 import { registerUser } from "../../../utils/localAuth";
 
 export default function Register() {
@@ -74,16 +74,6 @@ export default function Register() {
           <Text style={styles.landingScreenText}>Register</Text>
         </Pressable>
       </View>
-      <Pressable
-        style={styles.alreadyAccountContainer}
-        onPress={() => {
-          router.push("/screens/auth/login");
-        }}
-      >
-        <Text style={styles.alreadyAccountText}>
-          Already have an account? Sign in
-        </Text>
-      </Pressable>
     </ImageBackground>
   );
 }
