@@ -8,6 +8,8 @@ export default function Layout() {
         <Stack.Screen name="index" />
         <Stack.Screen name="screens/auth/login" />
         <Stack.Screen name="screens/auth/register" />
+        <Stack.Screen name="screens/settings/createprofile" />
+        <Stack.Screen name="screens/settings/changepassword" />
       </Stack>
     </PreloadImages>
   );

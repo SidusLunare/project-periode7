@@ -1,16 +1,14 @@
-// utils/localAuth.js
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// If you're on Android emulator, use 10.0.2.2 instead of localhost
-// If you're on a real device, use your computer's LAN IP (like 192.168.x.x)
-const SERVER_URL = "http://10.250.187.36:3000";
+const SERVER_URL = "http://192.168.1.92:3000"; // or your machine's IP if using a device
 
+// Register a user: store minimal info locally + try server
 export async function registerUser(email, password) {
-  // 1. Always store locally so user can be offline
-  const newUser = { email, password };
-  await AsyncStorage.setItem("userProfile", JSON.stringify(newUser));
+  const userProfile = { email, password };
+  // Save locally for offline
+  await AsyncStorage.setItem("userProfile", JSON.stringify(userProfile));
 
-  // 2. Attempt to sync with server
+  // Attempt server sync
   try {
     const response = await fetch(`${SERVER_URL}/register`, {
       method: "POST",
@@ -21,16 +19,15 @@ export async function registerUser(email, password) {
       const data = await response.json();
       throw new Error(data.error || "Server registration failed");
     }
-    // If server returns ok, we are synced
     return { message: "Registered locally + server synced" };
   } catch (error) {
-    // If offline or server error, we still have local data
     return { message: "Registered locally (server sync failed)", error };
   }
 }
 
+// Login a user: try server first, fallback to local if offline
 export async function loginUser(email, password) {
-  // 1. Try server login first
+  // 1. Try server
   try {
     const response = await fetch(`${SERVER_URL}/login`, {
       method: "POST",
@@ -38,16 +35,18 @@ export async function loginUser(email, password) {
       body: JSON.stringify({ email, password }),
     });
     if (response.ok) {
-      // If server login is good, store/refresh local credentials
-      const user = { email, password };
-      await AsyncStorage.setItem("userProfile", JSON.stringify(user));
+      // If server login success, store/refresh local
+      const userProfile = { email, password };
+      await AsyncStorage.setItem("userProfile", JSON.stringify(userProfile));
       return { message: "Logged in via server + updated local" };
     } else {
       const data = await response.json();
       throw new Error(data.error || "Server login failed");
     }
-  } catch (serverError) {
-    // 2. If server unreachable or error, check local storage
+  } catch (error) {
+    console.warn("Server login failed, checking local offline data...");
+
+    // 2. Offline fallback
     const storedProfile = await AsyncStorage.getItem("userProfile");
     if (!storedProfile) {
       throw new Error("No local user found. Please register first.");
@@ -59,4 +58,9 @@ export async function loginUser(email, password) {
       throw new Error("Invalid offline credentials + server login failed");
     }
   }
+}
+
+// Optional: logout function
+export async function logoutUser() {
+  await AsyncStorage.removeItem("userProfile");
 }

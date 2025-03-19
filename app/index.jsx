@@ -20,10 +20,9 @@ export default function App() {
       try {
         const storedProfile = await AsyncStorage.getItem("userProfile");
         if (storedProfile) {
-          // User is already logged in, go to home
+          // If user is already logged in, skip to home
           router.push("/screens/tabs/home");
         } else {
-          // No stored user, show the landing screen
           setIsChecking(false);
         }
       } catch (error) {
@@ -34,7 +33,6 @@ export default function App() {
   }, []);
 
   if (isChecking) {
-    // Show a spinner or splash while we check
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#000" />
@@ -42,7 +40,6 @@ export default function App() {
     );
   }
 
-  // Normal landing screen UI
   return (
     <ImageBackground
       style={styles.background}
@@ -98,7 +95,7 @@ const styles = StyleSheet.create({
     gap: 20,
     width: "100%",
     height: "100%",
-    marginBottom: "100",
+    marginBottom: 100,
   },
   textContainer: {
     display: "flex",
@@ -112,7 +109,6 @@ const styles = StyleSheet.create({
     letterSpacing: 3.2,
     lineHeight: 55,
     fontWeight: "700",
-    fontFamily: "Inter-Bold",
     color: "#fff",
     textAlign: "left",
     width: 312,
@@ -132,7 +128,6 @@ const styles = StyleSheet.create({
     letterSpacing: 1.1,
     lineHeight: 55,
     fontWeight: "700",
-    fontFamily: "Inter-Bold",
     color: "white",
     textAlign: "center",
     display: "flex",
