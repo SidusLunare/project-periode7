@@ -15,7 +15,7 @@ import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 
-const SERVER_URL = "http://localhost:3000"; // or 10.0.2.2:3000 for Android emulator, or your LAN IP for real device
+const SERVER_URL = "http://192.168.0.125:3000"; // or 10.0.2.2:3000 for Android emulator, or your LAN IP for real device
 const avatarSize = 80;
 const bannerHeight = 120;
 
@@ -28,7 +28,9 @@ export default function CreateProfile() {
 
   // Avatar & Banner
   const [avatarUrl, setAvatarUrl] = useState("https://via.placeholder.com/100");
-  const [bannerUrl, setBannerUrl] = useState("https://via.placeholder.com/1000x300/000/fff?text=Banner");
+  const [bannerUrl, setBannerUrl] = useState(
+    "https://via.placeholder.com/1000x300/000/fff?text=Banner"
+  );
 
   // Public fields
   const [name, setName] = useState("");
@@ -64,7 +66,7 @@ export default function CreateProfile() {
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ImagePicker.MediaType.Images,
       allowsEditing: true,
       aspect: [16, 9],
       quality: 1,
@@ -82,7 +84,7 @@ export default function CreateProfile() {
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ImagePicker.MediaType.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
@@ -98,7 +100,10 @@ export default function CreateProfile() {
       // We pass localEmail/localPassword to the server so it can validate.
       // The user doesn't see them in the UI.
       if (!localEmail || !localPassword) {
-        Alert.alert("Error", "No stored credentials found. Please log in first.");
+        Alert.alert(
+          "Error",
+          "No stored credentials found. Please log in first."
+        );
         return;
       }
 
@@ -216,53 +221,88 @@ export default function CreateProfile() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", paddingHorizontal: 16, paddingTop: 20 },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingHorizontal: 16,
+    paddingTop: 20,
+  },
   header: { fontSize: 22, fontWeight: "bold", marginBottom: 20 },
-  sectionHeader: { fontSize: 16, fontWeight: "bold", marginVertical: 10, marginTop: 20 },
+  sectionHeader: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginVertical: 10,
+    marginTop: 20,
+  },
   fieldContainer: { marginBottom: 10 },
   label: { fontSize: 14, color: "#555", marginBottom: 4 },
   input: {
-    borderWidth: 1, borderColor: "#ccc", borderRadius: 6,
-paddingHorizontal: 10, paddingVertical: 8, fontSize: 14,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    fontSize: 14,
     backgroundColor: "#f9f9f9",
   },
   textArea: {
-    height: 80, textAlignVertical: "top",
+    height: 80,
+    textAlignVertical: "top",
   },
   pickerContainer: {
-    borderWidth: 1, borderColor: "#ccc" , borderRadius: 6,
-    overflow: "hidden", backgroundColor: "#f9f9f9",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 6,
+    overflow: "hidden",
+    backgroundColor: "#f9f9f9",
   },
   picker: { height: 40, width: "100%" },
   bannerContainer: { position: "relative", marginBottom: 20 },
   bannerImage: {
-    width: "100%", height: bannerHeight,
-    backgroundColor: "#ccc", justifyContent: "flex-end",
+    width: "100%",
+    height: bannerHeight,
+    backgroundColor: "#ccc",
+    justifyContent: "flex-end",
   },
   bannerEditIcon: {
-    position: "absolute", right: 10, bottom: 10,
-    backgroundColor: "#000000aa", borderRadius: 4, padding: 4,
+    position: "absolute",
+    right: 10,
+    bottom: 10,
+    backgroundColor: "#000000aa",
+    borderRadius: 4,
+    padding: 4,
   },
   editIconText: { color: "#fff", fontSize: 14 },
   avatarContainer: {
-    position: "absolute", bottom: -avatarSize / 2, left: 16,
-    flexDirection: "row", alignItems: "center",
+    position: "absolute",
+    bottom: -avatarSize / 2,
+    left: 16,
+    flexDirection: "row",
+    alignItems: "center",
   },
   avatar: {
-    width: avatarSize, height: avatarSize,
-    borderRadius: avatarSize / 2, borderWidth: 3,
+    width: avatarSize,
+    height: avatarSize,
+    borderRadius: avatarSize / 2,
+    borderWidth: 3,
     borderColor: "#fff",
   },
   avatarEditIcon: {
-    marginLeft: -24, marginTop: -20,
-    backgroundColor: "#000000aa", borderRadius: 16, padding: 4,
+    marginLeft: -24,
+    marginTop: -20,
+    backgroundColor: "#000000aa",
+    borderRadius: 16,
+    padding: 4,
   },
   saveButton: {
-    backgroundColor: "black", padding: 14,
-    borderRadius: 8, marginBottom: 30,
+    backgroundColor: "black",
+    padding: 14,
+    borderRadius: 8,
+    marginBottom: 30,
   },
   saveButtonText: {
-    color: "#fff", textAlign: "center",
+    color: "#fff",
+    textAlign: "center",
     fontWeight: "bold",
   },
 });

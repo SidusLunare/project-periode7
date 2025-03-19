@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     gap: 20,
     width: "100%",
     height: "100%",
-    marginBottom: "100", // Note: original code used a string here
+    marginBottom: "100",
   },
   landingScreenButton: {
     borderRadius: 10,

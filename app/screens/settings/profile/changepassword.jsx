@@ -10,7 +10,7 @@ import {
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const SERVER_URL = "http://localhost:3000";
+const SERVER_URL = "http://192.168.0.125:3000";
 
 export default function ChangePassword() {
   const router = useRouter();
@@ -65,8 +65,12 @@ export default function ChangePassword() {
       <Text style={styles.title}>Change Password</Text>
       <Text style={styles.subtitle}>Your new password must:</Text>
       <Text style={styles.subtitle}>• Be at least 8 characters long</Text>
-      <Text style={styles.subtitle}>• Include uppercase, lowercase, numbers, symbols</Text>
-      <Text style={styles.subtitle}>• Not be the same as your current password</Text>
+      <Text style={styles.subtitle}>
+        • Include uppercase, lowercase, numbers, symbols
+      </Text>
+      <Text style={styles.subtitle}>
+        • Not be the same as your current password
+      </Text>
 
       <TextInput
         style={styles.input}
@@ -102,14 +106,21 @@ const styles = StyleSheet.create({
   title: { fontSize: 24, fontWeight: "bold", marginBottom: 10 },
   subtitle: { fontSize: 14, marginBottom: 4 },
   input: {
-    borderWidth: 1, borderColor: "#ccc", marginVertical: 8,
-    padding: 10, borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    marginVertical: 8,
+    padding: 10,
+    borderRadius: 5,
   },
   button: {
-    backgroundColor: "black", padding: 12,
-    borderRadius: 8, marginTop: 16,
+    backgroundColor: "black",
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 16,
   },
   buttonText: {
-    color: "white", fontWeight: "bold", textAlign: "center",
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
