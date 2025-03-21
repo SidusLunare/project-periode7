@@ -1,16 +1,20 @@
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, Pressable, FlatList } from 'react-native'
+import data from '../../data'
+import { useRouter } from "expo-router";
+import Details from '../components/Details';
 
 export default function Home() {
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-      <Text>My Trips</Text>
-      <Image style={styles.thumbnail} source={require('../../../assets/images/barcelona.png')} />
-      <Image style={styles.thumbnail} source={require('../../../assets/images/newyork.png')} />
-      <Image style={styles.thumbnail} source={require('../../../assets/images/barcelona.png')} />
-      <Image style={styles.thumbnail} source={require('../../../assets/images/barcelona.png')} />
-      <Image style={styles.thumbnail} source={require('../../../assets/images/barcelona.png')} />
-      </ScrollView>
+
+      <FlatList 
+        data={data}
+        keyExtractor={item => item.id}
+        renderItem={({item}) => (
+          <Details title={item.title}></Details>
+        )}
+      />
+      
     </View>
   )
 }
@@ -26,7 +30,20 @@ const styles = StyleSheet.create({
     width: 410,
     height: 200,
     borderRadius: 10,
-    resizeMode: 'cover'
-  }
+    resizeMode: 'cover',
+    margin: 5,
+  },
+
+  text: {
+    fontSize: 32,
+    fontWeight: 'bold',
+  },
+
+  date: {
+    marginLeft: 5,
+    color: 'grey',
+    marginBottom: 15,
+    fontSize: 12,
+  },
   
 })
