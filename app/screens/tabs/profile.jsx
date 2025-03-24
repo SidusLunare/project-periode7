@@ -11,16 +11,13 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SERVER_URL } from "../../../utils/config.js";
 
-const SERVER_URL = "http://192.168.0.125:3000"; // or localhost, or your LAN IP
-const coverHeight = 200;
-const avatarSize = 100;
 
 export default function Profile() {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [hasProfile, setHasProfile] = useState(false);
-
+  
   // Example fields from server or local data
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
@@ -29,7 +26,8 @@ export default function Profile() {
   const [coverUrl, setCoverUrl] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [favourites, setFavourites] = useState([]);
-
+  
+  const router = useRouter();
   useEffect(() => {
     (async () => {
       try {
@@ -182,21 +180,23 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   createProfileText: { color: "white", fontWeight: "600" },
-  container: { flex: 1, backgroundColor: "#fff" },
+  container: { flex: 1, backgroundColor: "#fff", },
   coverImage: { width: "100%", height: 200, backgroundColor: "#ccc" },
   profileContainer: {
     marginTop: -100 / 2,
     paddingHorizontal: 20,
-    alignItems: "center",
+    alignItems: "flex-start",
   },
   avatarWrapper: { marginBottom: 10 },
   avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    borderWidth: 3,
+    borderRadius: 100,
+    flex: 1,
+    width: "100%",
+    height: 124,
+    borderWidth: 6,
     borderColor: "#fff",
     backgroundColor: "#eee",
+    left: 22,
   },
   avatarPlaceholder: { backgroundColor: "#bbb" },
   userName: {

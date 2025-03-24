@@ -9,15 +9,15 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SERVER_URL } from "../../../../utils/config.js";
 
-const SERVER_URL = "http://192.168.0.125:3000";
 
 export default function ChangePassword() {
-  const router = useRouter();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [repeatNew, setRepeatNew] = useState("");
-
+  
+  const router = useRouter();
   const handleChangePassword = async () => {
     if (!oldPassword.trim() || !newPassword.trim() || !repeatNew.trim()) {
       Alert.alert("Error", "Please fill all fields.");

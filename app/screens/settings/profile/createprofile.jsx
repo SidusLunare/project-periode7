@@ -14,8 +14,8 @@ import { useRouter } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
+import { SERVER_URL } from "../../../../utils/config.js";
 
-const SERVER_URL = "http://192.168.0.125:3000"; // or 10.0.2.2:3000 for Android emulator, or your LAN IP for real device
 const avatarSize = 80;
 const bannerHeight = 120;
 

@@ -1,6 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const SERVER_URL = "http://192.168.0.125:3000"; // or your machine's IP if using a device
+import { SERVER_URL } from "./config.js";
 
 // Register a user: store minimal info locally + try server
 export async function registerUser(email, password) {

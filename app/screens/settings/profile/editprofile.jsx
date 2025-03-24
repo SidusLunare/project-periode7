@@ -15,18 +15,17 @@ import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { SERVER_URL } from "../../../../utils/config.js";
 
-const SERVER_URL = "http://192.168.0.125:3000"; // or 10.0.2.2:3000 for Android emulator
 const avatarSize = 80;
 const bannerHeight = 120;
 
 export default function EditProfile() {
-  const router = useRouter();
-
+  
   // We'll store the user's credentials behind the scenes
   const [localEmail, setLocalEmail] = useState("");
   const [localPassword, setLocalPassword] = useState("");
-
+  
   // Current profile data
   const [avatarUrl, setAvatarUrl] = useState("");
   const [bannerUrl, setBannerUrl] = useState("");
@@ -34,11 +33,12 @@ export default function EditProfile() {
   const [aboutMe, setAboutMe] = useState("");
   const [pronouns, setPronouns] = useState("he/him");
   const [favourites, setFavourites] = useState([]); // optional
-
+  
   // States for the "hover" effect on banner/avatar
   const [bannerHover, setBannerHover] = useState(false);
   const [avatarHover, setAvatarHover] = useState(false);
-
+  
+  const router = useRouter();
   // 1. On mount, load user from AsyncStorage and fetch their profile from the server
   useEffect(() => {
     (async () => {
