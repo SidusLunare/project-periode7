@@ -41,7 +41,7 @@ export default function Tabslayout() {
         }}
       />
       <Tabs.Screen
-        name="diary"
+        name="createtrip"
         options={{
           title: "Add Diary",
           tabBarIcon: ({}) => (

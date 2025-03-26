@@ -304,11 +304,6 @@ export default function EditProfile() {
   );
 }
 
-// We'll define states for "hover" outside the snippet, but let's put them in code:
-
-const [bannerHover, setBannerHover] = useState(false);
-const [avatarHover, setAvatarHover] = useState(false);
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
