@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View, Image, ScrollView, Pressable, FlatList } from 'react-native'
 import data from '../../data'
-import { useRouter } from "expo-router";
 import Details from '../components/Details';
 
 export default function Home() {

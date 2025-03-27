@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { useLocalSearchParams, router } from 'expo-router';
 import data from '../data';
 
 export default function TripScreen() {
@@ -12,7 +12,12 @@ export default function TripScreen() {
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
        
+        <View style={styles.header}>
         <Text style={styles.text}>{trip.city}</Text>
+        <TouchableOpacity style={styles.button} onPress={() => {router.push("/screens/tabs/home")}}>
+          <Text style={styles.buttonText}>✖</Text>
+        </TouchableOpacity>
+        </View>
 
         {trip ? (
           <Image style={styles.thumbnail} source={trip.img} />
@@ -33,6 +38,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
+  header: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  button: {
+    height: 15,
+  },
+
   scrollView: {
     padding: 10,
   },

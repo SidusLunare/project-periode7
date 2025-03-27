@@ -20,9 +20,9 @@ export default function Tabslayout() {
           title: "Home",
           tabBarIcon: ({}) => (
             <MaterialIcons
-              name="home" // Name of the Material icon you want
-              size={30} // Icon size
-              color="#000000" // Icon color
+              name="home"
+              size={30}
+              color="#000000"
             />
           ),
         }}
@@ -33,9 +33,9 @@ export default function Tabslayout() {
           title: "Groups",
           tabBarIcon: ({}) => (
             <MaterialIcons
-              name="group" // Name of the Material icon you want
-              size={30} // Icon size
-              color="#000000" // Icon color
+              name="group"
+              size={30}
+              color="#000000"
             />
           ),
         }}
@@ -46,9 +46,9 @@ export default function Tabslayout() {
           title: "Add Diary",
           tabBarIcon: ({}) => (
             <MaterialIcons
-              name="add" // Name of the Material icon you want
-              size={30} // Icon size
-              color="#000000" // Icon color
+              name="add"
+              size={30}
+              color="#000000"
             />
           ),
         }}
@@ -59,9 +59,9 @@ export default function Tabslayout() {
           title: "Notifications",
           tabBarIcon: ({}) => (
             <MaterialIcons
-              name="notifications" // Name of the Material icon you want
-              size={30} // Icon size
-              color="#000000" // Icon color
+              name="notifications"
+              size={30}
+              color="#000000"
             />
           ),
         }}
@@ -72,9 +72,9 @@ export default function Tabslayout() {
           title: "Profile",
           tabBarIcon: ({}) => (
             <MaterialIcons
-              name="person" // Name of the Material icon you want
-              size={30} // Icon size
-              color="#000000" // Icon color
+              name="person"
+              size={30}
+              color="#000000"
             />
           ),
         }}
