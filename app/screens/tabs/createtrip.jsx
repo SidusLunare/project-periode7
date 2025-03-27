@@ -80,9 +80,6 @@ export default function AddDiaryEntry() {
       {/* Header row (title + X button). If you want an actual close button: */}
       <View style={styles.headerRow}>
         <Text style={styles.title}>New diary entry</Text>
-        <Pressable onPress={() => router.back()}>
-          <Text style={styles.closeButton}>X</Text>
-        </Pressable>
       </View>
 
       {/* Banner image area */}
