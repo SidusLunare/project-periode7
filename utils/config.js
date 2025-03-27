@@ -1,4 +1,3 @@
-// utils/config.js
 
 const ENV = "school"; // Change to "production" when deploying
 
