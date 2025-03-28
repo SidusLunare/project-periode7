@@ -1,1 +1,43 @@
-[]
+[
+    {
+      "id": "trip-001",
+      "location": "Barcelona",
+      "image": "../assets/images/barcelona.png",
+      "startDate": "2023-07-01",
+      "endDate": "2023-07-10",
+      "entries": [
+        {
+          "entryId": "entry-001",
+          "date": "2023-07-02",
+          "text": "Visited Sagrada Familia and enjoyed the architecture."
+        },
+        {
+          "entryId": "entry-002",
+          "date": "2023-07-03",
+          "text": "Had lunch at La Boqueria market. Delicious tapas!"
+        }
+      ]
+    },
+    {
+      "id": "trip-002",
+      "location": "Paris",
+      "image": "../assets/images/paris.png",
+      "startDate": "2023-08-05",
+      "endDate": "2023-08-12",
+      "entries": []
+    },
+    {
+      "id": "trip-003",
+      "location": "Tokyo",
+      "image": "../assets/images/tokyo.png",
+      "startDate": "2023-09-10",
+      "endDate": "2023-09-20",
+      "entries": [
+        {
+          "entryId": "entry-003",
+          "date": "2023-09-11",
+          "text": "Explored Shibuya Crossing and enjoyed street food."
+        }
+      ]
+    }
+]

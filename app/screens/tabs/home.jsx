@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
   FlatList,
-  Image,
+  ImageBackground,
   Pressable,
   ActivityIndicator,
   StyleSheet,
@@ -34,7 +34,7 @@ export default function TripsOverview() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
+      <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -44,52 +44,105 @@ export default function TripsOverview() {
     router.push(`/diaryOverview?id=${trip.id}`);
   };
 
+  const renderTripCard = ({ item }) => {
+    return (
+      <Pressable style={styles.card} onPress={() => handleTripPress(item)}>
+        <ImageBackground
+          source={{ uri:item.image }}
+          style={styles.cardImage}
+          imageStyle={{ borderRadius: 12 }}
+        >
+          <View style={styles.overlay}>
+            <Text style={styles.locationText}>{item.location}</Text>
+            <Text style={styles.dateText}>
+              {item.startDate} - {item.endDate}
+            </Text>
+          </View>
+        </ImageBackground>
+      </Pressable>
+    );
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Trips Overview</Text>
-
+      <Text style={styles.header}>My Trips</Text>
       <FlatList
         data={trips}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <Pressable
-            style={styles.tripCard}
-            onPress={() => handleTripPress(item)}
-          >
-            {/* Show the trip's image */}
-            <Image source={{ uri: item.image }} style={styles.tripImage} />
-            <View style={{ marginLeft: 10 }}>
-              <Text style={styles.tripTitle}>{item.location}</Text>
-              <Text>
-                {item.startDate} - {item.endDate}
-              </Text>
-            </View>
-          </Pressable>
-        )}
+        renderItem={renderTripCard}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: "#fff" },
-  header: { fontSize: 22, fontWeight: "bold", marginBottom: 16 },
-  tripCard: {
-    flexDirection: "row",
-    backgroundColor: "#f1f1f1",
-    padding: 16,
-    borderRadius: 8,
-    marginVertical: 5,
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
   },
-  tripImage: { width: 60, height: 60, borderRadius: 8 },
-  tripTitle: { fontSize: 18, fontWeight: "bold" },
-  createButton: {
-    backgroundColor: "green",
-    padding: 14,
-    borderRadius: 8,
-    marginTop: 20,
-    alignItems: "center",
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingHorizontal: 16,
+    paddingTop: 20,
   },
-  createButtonText: { color: "#fff", fontWeight: "bold" },
+  header: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 16,
+  },
+  card: {
+    shadowColor: "rgba(186, 186, 186, 0.6)",
+    shadowOffset: {
+    width: 0,
+    height: 0
+    },
+    shadowRadius: 16.8,
+    elevation: 16.8,
+    shadowOpacity: 1,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    flex: 1,
+    width: "100%",
+    height: 150,
+    margin: 26.5,
+  },
+  cardImage: {
+    width: "95%",
+    height: "95%", // Adjust as needed
+    justifyContent: "center",
+  },
+  overlay: {
+  },
+  locationText: {
+    fontSize: 15,
+    letterSpacing: 0.5,
+    lineHeight: 20,
+    fontWeight: "700",
+    fontFamily: "Inter-Bold",
+    color: "#000",
+    textAlign: "left",
+    width: 93,
+    height: 27,
+    borderRadius: 6,
+    paddingBottom: 3,
+    paddingLeft: 8,
+    paddingTop: 4,
+    paddingRight: 6,
+    backgroundColor: "white",
+  },
+  dateText: {
+    fontSize: 10,
+    letterSpacing: 0.3,
+    lineHeight: 20,
+    fontWeight: "500",
+    fontFamily: "Inter-Medium",
+    color: "#a5a5a5",
+    textAlign: "left",
+    position: "absolute",
+    top: 50,
+    left: 10,
+  },
 });
