@@ -41,7 +41,7 @@ export default function TripsOverview() {
   }
 
   const handleTripPress = (trip) => {
-    router.push(`/diaryOverview?id=${trip.id}`);
+    router.push(`/diaryoverview?id=${trip.id}`);
   };
 
   const renderTripCard = ({ item }) => {
@@ -50,7 +50,6 @@ export default function TripsOverview() {
         <ImageBackground
           source={{ uri:item.image }}
           style={styles.cardImage}
-          imageStyle={{ borderRadius: 12 }}
         >
           <View style={styles.overlay}>
             <Text style={styles.locationText}>{item.location}</Text>

@@ -3,12 +3,12 @@ import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   Pressable,
   ScrollView,
   Image,
   ImageBackground,
   Alert,
+  TextInput,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
@@ -17,30 +17,30 @@ import * as ImagePicker from "expo-image-picker";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { SERVER_URL } from "../../../../utils/config.js";
 
-const avatarSize = 80;
+// Set bannerHeight and use it for avatarSize as well
 const bannerHeight = 120;
+const avatarSize = bannerHeight; // Avatar will be as big as the banner's height
 
 export default function CreateProfile() {
   const router = useRouter();
 
-  // We do NOT show these in the UI. We'll auto-load them from AsyncStorage (logged-in user).
+  // Hidden credentials
   const [localEmail, setLocalEmail] = useState("");
   const [localPassword, setLocalPassword] = useState("");
 
-  // Avatar & Banner
+  // Banner & Avatar URLs
   const [avatarUrl, setAvatarUrl] = useState("https://via.placeholder.com/100");
   const [bannerUrl, setBannerUrl] = useState(
     "https://via.placeholder.com/1000x300/000/fff?text=Banner"
   );
 
-  // Public fields
+  // Public info
   const [name, setName] = useState("");
   const [aboutMe, setAboutMe] = useState("");
   const [pronouns, setPronouns] = useState("he/him");
   const [favourites, setFavourites] = useState([]);
 
-  // On mount, load the user’s email/password from AsyncStorage
-  // so we can pass them to /createProfile behind the scenes.
+  // Load credentials from AsyncStorage on mount
   useEffect(() => {
     (async () => {
       try {
@@ -59,7 +59,7 @@ export default function CreateProfile() {
     })();
   }, []);
 
-  // Pick Banner
+  // Pick Banner Image
   const handleSelectBanner = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -67,17 +67,19 @@ export default function CreateProfile() {
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaType.Images,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [16, 9],
       quality: 1,
     });
-    if (!result.cancelled) {
-      setBannerUrl(result.uri);
+    if (!result.canceled) {
+      setBannerUrl(result.assets[0].uri);
+      console.log("successfully set avatar");
+      console.log(result.assets[0].uri);
     }
   };
 
-  // Pick Avatar
+  // Pick Avatar Image
   const handleSelectAvatar = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -85,21 +87,21 @@ export default function CreateProfile() {
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaType.Images,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
     });
-    if (!result.cancelled) {
-      setAvatarUrl(result.uri);
+    if (!result.canceled) {
+      setAvatarUrl(result.assets[0].uri);
+      console.log("successfully set avatar");
+      console.log(result.assets[0].uri);
     }
   };
 
-  // Save Profile
+  // Save Profile (hidden credentials are passed along)
   const handleSaveProfile = async () => {
     try {
-      // We pass localEmail/localPassword to the server so it can validate.
-      // The user doesn't see them in the UI.
       if (!localEmail || !localPassword) {
         Alert.alert(
           "Error",
@@ -107,16 +109,16 @@ export default function CreateProfile() {
         );
         return;
       }
-
       const body = {
         email: localEmail,
         password: localPassword,
-        name,
-        pronouns,
-        bio: aboutMe,
+        // Public info (if needed, uncomment below)
+        // name,
+        // pronouns,
+        // bio: aboutMe,
         coverUrl: bannerUrl,
         avatarUrl,
-        favourites,
+        // favourites,
       };
 
       const response = await fetch(`${SERVER_URL}/createProfile`, {
@@ -129,17 +131,16 @@ export default function CreateProfile() {
         throw new Error(data.error || "Failed to create/update profile");
       }
 
-      // Update local userProfile with hasProfile = true
       const userProfile = {
         email: localEmail,
         password: localPassword,
         hasProfile: true,
-        name,
-        pronouns,
-        bio: aboutMe,
+        // name,
+        // pronouns,
+        // bio: aboutMe,
         coverUrl: bannerUrl,
         avatarUrl,
-        favourites,
+        // favourites,
       };
       await AsyncStorage.setItem("userProfile", JSON.stringify(userProfile));
 
@@ -154,23 +155,22 @@ export default function CreateProfile() {
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Create Your Profile</Text>
 
-      {/* Avatar & Banner */}
       <Text style={styles.sectionHeader}>Avatar & Banner</Text>
 
+      {/* Banner Container with full left-side border radius */}
       <View style={styles.bannerContainer}>
-        
         <ImageBackground
           source={{ uri: bannerUrl }}
-          style={styles.bannerImage}
+          style={[styles.bannerImage, { backgroundColor: "#fff" }]}
           resizeMode="cover"
         >
           <Pressable
-            style={styles.bannerEditContainer}
+            style={styles.bannerPressable}
             onPress={handleSelectBanner}
           >
-            <View style={styles.avatarOverlay}>
+            <View style={styles.bannerOverlay}>
               <MaterialIcons
-                style={styles.bannerEditIcon}
+                style={styles.bannerOverlayIcon}
                 name="camera-alt"
                 size={24}
                 color="#fff"
@@ -179,16 +179,19 @@ export default function CreateProfile() {
           </Pressable>
         </ImageBackground>
 
-
+        {/* Avatar positioned inside banner on the left */}
         <View style={styles.avatarContainer}>
-          <Image source={{ uri: avatarUrl }} style={styles.avatar} />
+          <Image
+            source={{ uri: avatarUrl }}
+            style={[styles.avatar, { backgroundColor: "#fff" }]}
+          />
           <Pressable
-            style={styles.avatarEditContainer}
+            style={styles.avatarPressable}
             onPress={handleSelectAvatar}
           >
-            <View style={[styles.overlay, styles.avatarOverlay]}>
+            <View style={styles.avatarOverlay}>
               <MaterialIcons
-                style={styles.avatarEditIcon}
+                style={styles.avatarOverlayIcon}
                 name="camera-alt"
                 size={24}
                 color="#fff"
@@ -198,7 +201,7 @@ export default function CreateProfile() {
         </View>
       </View>
 
-      {/* Public Info */}
+      {/* Public Information section is commented out */}
       <Text style={styles.sectionHeader}>Public Information</Text>
       <View style={styles.fieldContainer}>
         <Text style={styles.label}>Name</Text>
@@ -235,9 +238,6 @@ export default function CreateProfile() {
         </View>
       </View>
 
-      {/* Favourites if needed (not shown here for brevity) */}
-
-      {/* Save Changes */}
       <Pressable style={styles.saveButton} onPress={handleSaveProfile}>
         <Text style={styles.saveButtonText}>Save Profile</Text>
       </Pressable>
@@ -278,48 +278,83 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 6,
-    overflow: "hidden",
-    backgroundColor: "#f9f9f9",
   },
-  picker: { height: 40, width: "100%" },
-  bannerContainer: { position: "relative", marginBottom: 20 },
+  /* Banner Container */
+  bannerContainer: {
+    position: "relative",
+    marginBottom: 40,
+    // Round the left side fully:
+    borderTopLeftRadius: bannerHeight / 2,
+    borderBottomLeftRadius: bannerHeight / 2,
+    overflow: "hidden",
+  },
   bannerImage: {
     width: "100%",
     height: bannerHeight,
     backgroundColor: "#ccc",
-    justifyContent: "flex-end",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#dddddd",
   },
-  bannerEditContainer: {
-
+  bannerPressable: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  bannerEditIcon: {
+  bannerOverlay: {
+    padding: 10,
+    borderTopLeftRadius: bannerHeight / 2,
+    borderBottomLeftRadius: bannerHeight / 2,
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  bannerOverlayIcon: {
+    padding: 10,
+    marginLeft: 117,
+    borderRadius: 100,
     backgroundColor: "#000000aa",
-    borderRadius: 28,
-    padding: 6,
   },
-  editIconText: { color: "#fff", fontSize: 14 },
+  /* Avatar - now inside the banner, on the left side */
   avatarContainer: {
     position: "absolute",
-    bottom: -avatarSize / 2,
-    left: 16,
-    flexDirection: "row",
+    left: 0,
+    top: 0,
+    width: bannerHeight, // Same as banner height
+    height: bannerHeight,
+    justifyContent: "center",
     alignItems: "center",
   },
   avatar: {
-    width: avatarSize,
-    height: avatarSize,
-    borderRadius: avatarSize / 2,
-    borderWidth: 3,
-    borderColor: "#fff",
+    width: bannerHeight, // fill the container
+    height: bannerHeight,
+    borderRadius: bannerHeight / 2,
+    borderWidth: 2,
+    borderColor: "#dddddd",
   },
-  avatarEditContainer: {
-
+  avatarPressable: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  avatarEditIcon: {
+  avatarOverlay: {
+    padding: 8,
+    borderRadius: bannerHeight / 2,
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  avatarOverlayIcon: {
+    padding: 8,
+    borderRadius: bannerHeight / 2,
     backgroundColor: "#000000aa",
-    borderRadius: 28,
-    padding: 6,
   },
+  /* Save Button */
   saveButton: {
     backgroundColor: "black",
     padding: 14,
