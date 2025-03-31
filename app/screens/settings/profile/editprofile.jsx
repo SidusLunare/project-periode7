@@ -219,7 +219,7 @@ export default function EditProfile() {
         >
           {bannerHover && (
             <View style={styles.overlay}>
-              <MaterialIcons name="camera-alt" size={24} color="#fff" />
+              <MaterialIcons name="add_a_photo" size={24} color="#fff" />
             </View>
           )}
         </ImageBackground>

@@ -14,6 +14,7 @@ import { useRouter } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { SERVER_URL } from "../../../../utils/config.js";
 
 const avatarSize = 80;
@@ -155,20 +156,44 @@ export default function CreateProfile() {
 
       {/* Avatar & Banner */}
       <Text style={styles.sectionHeader}>Avatar & Banner</Text>
+
       <View style={styles.bannerContainer}>
+        
         <ImageBackground
           source={{ uri: bannerUrl }}
           style={styles.bannerImage}
           resizeMode="cover"
         >
-          <Pressable style={styles.bannerEditIcon} onPress={handleSelectBanner}>
-            <Text style={styles.editIconText}>🖉</Text>
+          <Pressable
+            style={styles.bannerEditContainer}
+            onPress={handleSelectBanner}
+          >
+            <View style={styles.avatarOverlay}>
+              <MaterialIcons
+                style={styles.bannerEditIcon}
+                name="camera-alt"
+                size={24}
+                color="#fff"
+              />
+            </View>
           </Pressable>
         </ImageBackground>
+
+
         <View style={styles.avatarContainer}>
           <Image source={{ uri: avatarUrl }} style={styles.avatar} />
-          <Pressable style={styles.avatarEditIcon} onPress={handleSelectAvatar}>
-            <Text style={styles.editIconText}>🖉</Text>
+          <Pressable
+            style={styles.avatarEditContainer}
+            onPress={handleSelectAvatar}
+          >
+            <View style={[styles.overlay, styles.avatarOverlay]}>
+              <MaterialIcons
+                style={styles.avatarEditIcon}
+                name="camera-alt"
+                size={24}
+                color="#fff"
+              />
+            </View>
           </Pressable>
         </View>
       </View>
@@ -264,13 +289,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#ccc",
     justifyContent: "flex-end",
   },
+  bannerEditContainer: {
+
+  },
   bannerEditIcon: {
-    position: "absolute",
-    right: 10,
-    bottom: 10,
     backgroundColor: "#000000aa",
-    borderRadius: 4,
-    padding: 4,
+    borderRadius: 28,
+    padding: 6,
   },
   editIconText: { color: "#fff", fontSize: 14 },
   avatarContainer: {
@@ -287,12 +312,13 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: "#fff",
   },
+  avatarEditContainer: {
+
+  },
   avatarEditIcon: {
-    marginLeft: -24,
-    marginTop: -20,
     backgroundColor: "#000000aa",
-    borderRadius: 16,
-    padding: 4,
+    borderRadius: 28,
+    padding: 6,
   },
   saveButton: {
     backgroundColor: "black",

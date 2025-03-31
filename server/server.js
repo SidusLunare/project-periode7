@@ -235,11 +235,9 @@ app.post("/trips", (req, res) => {
   const { id, location, image, startDate, endDate } = req.body;
 
   if (!id || !location || !image || !startDate || !endDate) {
-    return res
-      .status(400)
-      .json({
-        error: "Missing one of: id, location, image, startDate, endDate",
-      });
+    return res.status(400).json({
+      error: "Missing one of: id, location, image, startDate, endDate",
+    });
   }
 
   const trips = loadTrips();
