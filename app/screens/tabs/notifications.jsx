@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
-import Toast from "react-native-toast-message";
-import { useRouter } from 'expo-router';
 
 export default function NotificationScreen() {
   
@@ -39,19 +37,7 @@ const addNotification = () => {
 
     setNotifications((prev) => [newNotification, ...prev]);
 
-    // Show the in-app pop-up notification
-    Toast.show({
-      type: 'info',
-      text1: 'New Notification',
-      text2: text,
-      position: 'top',
-      visibilityTime: 3000,
-      autoHide: true,
-      onPress: () => {
-        // Navigate to the NotificationScreen using useRouter
-        router.push('/notifications');  // Make sure your notification page path is correct
-      },
-    });
+    
 
     setText('');
     setImage(null);
