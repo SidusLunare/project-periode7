@@ -201,6 +201,7 @@ export default function EditProfile() {
     <ScrollView style={styles.container}>
       <View style={styles.headerContainer}>
         <MaterialIcons style={styles.headerIcon} name="person" size={32} color="#000" />
+        
         <Text style={styles.header}>Edit Profile</Text>
       </View>
 

@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { SERVER_URL } from "../../../utils/config.js";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 export default function TripsOverview() {
   const router = useRouter();
@@ -46,25 +47,33 @@ export default function TripsOverview() {
 
   const renderTripCard = ({ item }) => {
     return (
-      <Pressable style={styles.card} onPress={() => handleTripPress(item)}>
+      <View>
+            <Pressable style={styles.card} onPress={() => handleTripPress(item)}>
         <ImageBackground
-          source={{ uri:item.image }}
+          source={{ uri: item.image }}
           style={styles.cardImage}
         >
           <View style={styles.overlay}>
             <Text style={styles.locationText}>{item.location}</Text>
-            <Text style={styles.dateText}>
-              {item.startDate} - {item.endDate}
-            </Text>
           </View>
         </ImageBackground>
       </Pressable>
+        <View style={styles.dateTextContainer}>
+            <MaterialIcons name="schedule" size={12} color="#a5a5a5" />
+            <Text style={styles.dateText}>
+              {item.startDate} - {item.endDate}
+            </Text>
+        </View>
+      </View>
     );
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>My Trips</Text>
+      <View style={styles.headerContainer}>
+        <MaterialIcons style={styles.headerIcon} name="work" size={32} color="#000" />
+        <Text style={styles.header}>My Trips</Text>
+      </View>
       <FlatList
         data={trips}
         keyExtractor={(item) => item.id}
@@ -87,13 +96,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 20,
   },
+  headerContainer: {
+    display: "flex",
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    alignContent: 'center',
+    gap: 16,
+    marginLeft: 16,
+  },
   header: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 16,
+    fontSize: 30,
+    letterSpacing: 0.9,
+    lineHeight: 55,
+    fontWeight: "700",
+    fontFamily: "Inter-Bold",
+    color: "#000",
+    textAlign: "left",
+    width: 138,
+    height: 55
+  },
+  headerIcon: {
   },
   card: {
-    shadowColor: "rgba(186, 186, 186, 0.6)",
+    shadowColor: "rgba(66, 66, 66, 0.6)",
     shadowOffset: {
     width: 0,
     height: 0
@@ -106,14 +132,34 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: 150,
-    margin: 26.5,
+    marginHorizontal: 26.5,
+    marginTop: 26.5,
   },
   cardImage: {
     width: "95%",
-    height: "95%", // Adjust as needed
+    height: "95%",
     justifyContent: "center",
   },
   overlay: {
+    shadowColor: "rgba(0, 0, 0, 0.6)",
+    shadowOffset: {
+    width: 0,
+    height: 0
+    },
+    shadowRadius: 2,
+    elevation: 2,
+    shadowOpacity: 1,
+    borderRadius: 6,
+    backgroundColor: "#fff",
+    width: "30%",
+    height: 50,
+    display: "flex",
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    paddingLeft: 8,
+    position: "relative",
+    bottom: -38,
+    left: 16,
   },
   locationText: {
     fontSize: 15,
@@ -123,14 +169,18 @@ const styles = StyleSheet.create({
     fontFamily: "Inter-Bold",
     color: "#000",
     textAlign: "left",
-    width: 93,
-    height: 27,
-    borderRadius: 6,
-    paddingBottom: 3,
-    paddingLeft: 8,
-    paddingTop: 4,
-    paddingRight: 6,
-    backgroundColor: "white",
+    width: "auto",
+    height: "auto",
+    padding: 4,
+  },
+  dateTextContainer: {
+    display: "flex",
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignContent: 'flex-start',
+    alignItems: 'center',
+    gap: 4,
+    marginLeft: 32,
   },
   dateText: {
     fontSize: 10,
@@ -140,8 +190,5 @@ const styles = StyleSheet.create({
     fontFamily: "Inter-Medium",
     color: "#a5a5a5",
     textAlign: "left",
-    position: "absolute",
-    top: 50,
-    left: 10,
   },
 });

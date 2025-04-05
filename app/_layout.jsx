@@ -11,6 +11,7 @@ export default function Layout() {
         <Stack.Screen name="screens/settings/profile/createprofile" />
         <Stack.Screen name="screens/settings/profile/changepassword" />
         <Stack.Screen name="screens/settings/profile/editprofile" />
+        <Stack.Screen name="screens/diaries/diaryoverview" />
       </Stack>
     </PreloadImages>
   );

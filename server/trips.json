@@ -2,7 +2,7 @@
   {
     "id": "trip-001",
     "location": "Barcelona",
-    "image": "../../../assets/images/barcelona.png",
+    "image": "./img/barcelona.png",
     "startDate": "2023-07-01",
     "endDate": "2023-07-10",
     "entries": [
@@ -21,7 +21,7 @@
   {
     "id": "trip-002",
     "location": "Paris",
-    "image": "../../../assets/images/paris.png",
+    "image": "./img/paris.png",
     "startDate": "2023-08-05",
     "endDate": "2023-08-12",
     "entries": []
@@ -29,7 +29,7 @@
   {
     "id": "trip-003",
     "location": "Tokyo",
-    "image": "../../../../../assets/images/tokyo.png",
+    "image": "./img/tokyo.png",
     "startDate": "2023-09-10",
     "endDate": "2023-09-20",
     "entries": [

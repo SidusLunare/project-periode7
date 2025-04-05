@@ -11,11 +11,9 @@ import {
   TextInput,
   Alert,
 } from "react-native";
-import { useSearchParams } from "expo-router";
 import { SERVER_URL } from "../../../utils/config.js";
 
 export default function DiaryOverview() {
-  const { id } = useSearchParams();
   const [trip, setTrip] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -27,7 +25,7 @@ export default function DiaryOverview() {
   useEffect(() => {
     const fetchTrip = async () => {
       try {
-        const response = await fetch(`${SERVER_URL}/trips/${id}`);
+        const response = await fetch(`${SERVER_URL}/trips`);
         if (!response.ok) throw new Error("Failed to fetch trip");
         const data = await response.json();
         setTrip(data);
