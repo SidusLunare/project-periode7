@@ -11,7 +11,7 @@ import {
   TextInput,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { Picker } from "@react-native-picker/picker";
+import RNPickerSelect from "react-native-picker-select";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -37,7 +37,7 @@ export default function CreateProfile() {
   // Public info
   const [name, setName] = useState("");
   const [aboutMe, setAboutMe] = useState("");
-  const [pronouns, setPronouns] = useState("he/him");
+  const [pronouns, setPronouns] = useState("");
   const [favourites, setFavourites] = useState([]);
 
   // Load credentials from AsyncStorage on mount
@@ -152,8 +152,17 @@ export default function CreateProfile() {
   };
 
   return (
+    <>
     <ScrollView style={styles.container}>
-      <Text style={styles.header}>Create Your Profile</Text>
+      <View style={styles.headerContainer}>
+        <MaterialIcons
+                style={styles.headerIcon}
+                name="person"
+                size={32}
+                color="#000"
+        />
+        <Text style={styles.header}>Create Your Profile</Text>
+      </View>
 
       <Text style={styles.sectionHeader}>Avatar & Banner</Text>
 
@@ -201,7 +210,6 @@ export default function CreateProfile() {
         </View>
       </View>
 
-      {/* Public Information section is commented out */}
       <Text style={styles.sectionHeader}>Public Information</Text>
       <View style={styles.fieldContainer}>
         <Text style={styles.label}>Name</Text>
@@ -224,24 +232,28 @@ export default function CreateProfile() {
       </View>
       <View style={styles.fieldContainer}>
         <Text style={styles.label}>Pronouns</Text>
-        <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={pronouns}
-            onValueChange={(itemValue) => setPronouns(itemValue)}
-            style={styles.picker}
-          >
-            <Picker.Item label="He/Him" value="he/him" />
-            <Picker.Item label="She/Her" value="she/her" />
-            <Picker.Item label="They/Them" value="they/them" />
-            <Picker.Item label="Other" value="other" />
-          </Picker>
+          <View style={styles.pickerContainer}>
+          <RNPickerSelect
+          onValueChange={(value) => setPronouns(value)}
+          value={pronouns}
+          placeholder={{ label: "Select your pronouns...", value: null }}
+          items={[
+            { label: "He/Him", value: "he/him" },
+            { label: "She/Her", value: "she/her" },
+            { label: "They/Them", value: "they/them" },
+            { label: "Other", value: "other" },
+          ]}
+        />
         </View>
       </View>
 
-      <Pressable style={styles.saveButton} onPress={handleSaveProfile}>
-        <Text style={styles.saveButtonText}>Save Profile</Text>
-      </Pressable>
     </ScrollView>
+      <View style={styles.saveButtonContainer}>
+        <Pressable style={styles.saveButton} onPress={handleSaveProfile}>
+          <Text style={styles.saveButtonText}>Save Profile</Text>
+        </Pressable> 
+      </View>
+    </>
   );
 }
 
@@ -252,32 +264,77 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 20,
   },
-  header: { fontSize: 22, fontWeight: "bold", marginBottom: 20 },
-  sectionHeader: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginVertical: 10,
-    marginTop: 20,
+  headerContainer: {
+    display: "flex",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginBottom: 20,
+    gap: "5"
   },
-  fieldContainer: { marginBottom: 10 },
-  label: { fontSize: 14, color: "#555", marginBottom: 4 },
+  header: {
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+  headerIcon: {
+    height: "32",
+    width: "32"
+  },
+  sectionHeader: {
+    fontSize: 24,
+    letterSpacing: 0,
+    fontStyle: "italic",
+    fontFamily: "Inter-Light",
+    color: "#000",
+    textAlign: "left",
+    width: 178,
+    height: 30
+  },
+  fieldContainer: { marginBottom: 10, marginLeft: 16, marginTop: 16, },
+  label: {
+    fontSize: 18,
+    letterSpacing: 0,
+    fontStyle: "italic",
+    fontWeight: "200",
+    fontFamily: "Inter-ExtraLight",
+    color: "#000",
+    textAlign: "left"
+  },
   input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 6,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    fontSize: 14,
-    backgroundColor: "#f9f9f9",
+    shadowColor: "rgba(66, 66, 66, 0.6)",
+    shadowOffset: {
+      width: 0,
+      height: 0
+    },
+    shadowRadius: 16.8,
+    elevation: 16.8,
+    shadowOpacity: 1,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    flex: 1,
+    width: "100%",
+    height: 50,
+    paddingLeft: "16",
+    textAlignVertical: "center"
   },
   textArea: {
     height: 80,
     textAlignVertical: "top",
   },
   pickerContainer: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 6,
+    shadowColor: "rgba(66, 66, 66, 0.6))",
+    shadowOffset: {
+      width: 0,
+      height: 0
+    },
+    shadowRadius: 16.8,
+    elevation: 16.8,
+    shadowOpacity: 1,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    flex: 1,
+    width: "50%",
+    height: 50
   },
   /* Banner Container */
   bannerContainer: {
@@ -355,15 +412,35 @@ const styles = StyleSheet.create({
     backgroundColor: "#000000aa",
   },
   /* Save Button */
+  saveButtonContainer: {
+    display: "flex",
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: "100%",
+    position: "absolute",
+    bottom: 32
+  },
   saveButton: {
-    backgroundColor: "black",
-    padding: 14,
-    borderRadius: 8,
-    marginBottom: 30,
+    shadowColor: "rgba(66, 66, 66, 0.6)",
+    shadowOffset: {
+    width: 0,
+    height: 0
+    },
+    shadowRadius: 16.8,
+    elevation: 16.8,
+    shadowOpacity: 1,
+    borderRadius: 10,
+    backgroundColor: "#000",
+    flex: 1,
+    width: "85%",
+    height: 50,
   },
   saveButtonText: {
     color: "#fff",
     textAlign: "center",
     fontWeight: "bold",
+    textAlignVertical: "center",
+    height: "100%",
+    width: "100%"
   },
 });
