@@ -48,21 +48,22 @@ export default function TripsOverview() {
   const renderTripCard = ({ item }) => {
     return (
       <View>
-            <Pressable style={styles.card} onPress={() => handleTripPress(item)}>
-        <ImageBackground
-          source={{ uri: item.image }}
-          style={styles.cardImage}
-        >
-          <View style={styles.overlay}>
-            <Text style={styles.locationText}>{item.location}</Text>
-          </View>
-        </ImageBackground>
-      </Pressable>
+        <Pressable style={styles.card} onPress={() => handleTripPress(item)}>
+          <ImageBackground
+            source={{ uri: `${SERVER_URL}/images/${item.image}` }}
+            style={styles.cardImage}
+            imageStyle={{ borderRadius: 10 }}
+          >
+            <View style={styles.overlay}>
+              <Text style={styles.locationText}>{item.location}</Text>
+            </View>
+          </ImageBackground>
+        </Pressable>
         <View style={styles.dateTextContainer}>
-            <MaterialIcons name="schedule" size={12} color="#a5a5a5" />
-            <Text style={styles.dateText}>
-              {item.startDate} - {item.endDate}
-            </Text>
+          <MaterialIcons name="schedule" size={12} color="#a5a5a5" />
+          <Text style={styles.dateText}>
+            {item.startDate} - {item.endDate}
+          </Text>
         </View>
       </View>
     );
@@ -71,7 +72,7 @@ export default function TripsOverview() {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <MaterialIcons style={styles.headerIcon} name="work" size={32} color="#000" />
+        <MaterialIcons name="work" size={32} color="#000" />
         <Text style={styles.header}>My Trips</Text>
       </View>
       <FlatList
@@ -98,10 +99,10 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     display: "flex",
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    alignContent: 'center',
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    alignContent: "center",
     gap: 16,
     marginLeft: 16,
   },
@@ -114,15 +115,14 @@ const styles = StyleSheet.create({
     color: "#000",
     textAlign: "left",
     width: 138,
-    height: 55
+    height: 55,
   },
-  headerIcon: {
-  },
+  headerIcon: {},
   card: {
     shadowColor: "rgba(66, 66, 66, 0.6)",
     shadowOffset: {
-    width: 0,
-    height: 0
+      width: 0,
+      height: 0,
     },
     shadowRadius: 16.8,
     elevation: 16.8,
@@ -130,35 +130,35 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#fff",
     flex: 1,
-    width: "100%",
+    width: "85%",
     height: 150,
     marginHorizontal: 26.5,
     marginTop: 26.5,
   },
   cardImage: {
-    width: "95%",
-    height: "95%",
+    width: "100%",
+    height: "100%",
     justifyContent: "center",
   },
   overlay: {
     shadowColor: "rgba(0, 0, 0, 0.6)",
     shadowOffset: {
-    width: 0,
-    height: 0
+      width: 0,
+      height: 0,
     },
     shadowRadius: 2,
     elevation: 2,
     shadowOpacity: 1,
     borderRadius: 6,
     backgroundColor: "#fff",
-    width: "30%",
-    height: 50,
+    width: "35%",
+    height: 35,
     display: "flex",
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    justifyContent: "center",
+    alignItems: "flex-start",
     paddingLeft: 8,
     position: "relative",
-    bottom: -38,
+    bottom: -46,
     left: 16,
   },
   locationText: {
@@ -175,10 +175,10 @@ const styles = StyleSheet.create({
   },
   dateTextContainer: {
     display: "flex",
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignContent: 'flex-start',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignContent: "flex-start",
+    alignItems: "center",
     gap: 4,
     marginLeft: 32,
   },

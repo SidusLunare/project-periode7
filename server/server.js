@@ -259,6 +259,8 @@ app.post("/trips", (req, res) => {
   res.json(newTrip);
 });
 
+// In your node.js server (Express):
+app.use("/images", express.static(path.join(__dirname, "images")));
 // POST /trips/:id/edit -> Add/edit diary entries for the trip
 // Body: entryId, date, text
 app.post("/trips/:id/edit", (req, res) => {

@@ -42,7 +42,9 @@ export default function Profile() {
             return;
           }
           const localUser = JSON.parse(stored);
-          const response = await fetch(`${SERVER_URL}/profile?email=${localUser.email}`);
+          const response = await fetch(
+            `${SERVER_URL}/profile?email=${localUser.email}`
+          );
           if (!response.ok) {
             setHasProfile(false);
             setIsLoading(false);
@@ -95,65 +97,85 @@ export default function Profile() {
 
   return (
     <>
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
-      {/* Cover Image */}
-      <ImageBackground
-        source={coverUrl ? { uri: coverUrl } : null}
-        style={styles.coverImage}
-        resizeMode="cover"
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ paddingBottom: 40 }}
       >
-        {/* Gear icon in top-right for editing */}
-      </ImageBackground>
+        {/* Cover Image */}
+        <ImageBackground
+          source={coverUrl ? { uri: coverUrl } : null}
+          style={styles.coverImage}
+          resizeMode="cover"
+        >
+          {/* Gear icon in top-right for editing */}
+        </ImageBackground>
 
-      {/* White card overlapping the cover */}
-      <View style={styles.profileCard}>
-        {/* Avatar overlapping left side of the card */}
-        <View style={styles.avatarContainer}>
-          {avatarUrl ? (
-            <Image source={{ uri: avatarUrl }} style={styles.avatar} />
-          ) : (
-            <View style={[styles.avatar, styles.avatarPlaceholder]} />
-          )}
-        </View>
-
-        {/* Text info inside the card */}
-        <View style={styles.infoContainer}>
-          <View style={styles.nameRow}>
-            <Text style={styles.userName}>{userName}</Text>
-            {/* Optional small edit icon next to name */}
-            <Pressable onPress={() => router.push("/screens/settings/profile/editprofile")} style={styles.nameEditPressable}>
-              <MaterialIcons name="edit" size={18} color="#000" />
-            </Pressable>
+        {/* White card overlapping the cover */}
+        <View style={styles.profileCard}>
+          {/* Avatar overlapping left side of the card */}
+          <View style={styles.avatarContainer}>
+            {avatarUrl ? (
+              <Image source={{ uri: avatarUrl }} style={styles.avatar} />
+            ) : (
+              <View style={[styles.avatar, styles.avatarPlaceholder]} />
+            )}
           </View>
 
-          <Text style={styles.pronouns}>{pronouns}</Text>
-
-          <View style={styles.bioContainer}>
-            <Text style={styles.bio}>{bio}</Text>
-          </View>
-
-          {/* Favourites */}
-          {favourites.length > 0 && (
-            <>
-              <View style={styles.favHeaderRow}>
-                <MaterialIcons name="favorite" size={20} color="#f00" style={{ marginRight: 5 }} />
-                <Text style={styles.sectionTitle}>My favourites</Text>
-              </View>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                style={styles.favouritesRow}
+          {/* Text info inside the card */}
+          <View style={styles.infoContainer}>
+            <View style={styles.nameRow}>
+              <Text style={styles.userName}>{userName}</Text>
+              {/* Optional small edit icon next to name */}
+              <Pressable
+                onPress={() =>
+                  router.push("/screens/settings/profile/editprofile")
+                }
+                style={styles.nameEditPressable}
               >
-                {favourites.map((favUrl, index) => (
-                  <Image key={index} source={{ uri: favUrl }} style={styles.favImage} />
-                ))}
-              </ScrollView>
-            </>
-          )}
+                <MaterialIcons name="edit" size={18} color="#000" />
+              </Pressable>
+            </View>
+
+            <Text style={styles.pronouns}>{pronouns}</Text>
+
+            <View style={styles.bioContainer}>
+              <Text style={styles.bio}>{bio}</Text>
+            </View>
+
+            {/* Favourites */}
+            {favourites.length > 0 && (
+              <>
+                <View style={styles.favHeaderRow}>
+                  <MaterialIcons
+                    name="favorite"
+                    size={20}
+                    color="#f00"
+                    style={{ marginRight: 5 }}
+                  />
+                  <Text style={styles.sectionTitle}>My favourites</Text>
+                </View>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  style={styles.favouritesRow}
+                >
+                  {favourites.map((favUrl, index) => (
+                    <Image
+                      key={index}
+                      source={{ uri: favUrl }}
+                      style={styles.favImage}
+                    />
+                  ))}
+                </ScrollView>
+              </>
+            )}
+          </View>
         </View>
-      </View>
       </ScrollView>
-      <Pressable style={styles.gearIconPressable} onPress={() => router.push("/screens/settings/profile/editprofile")}>
+      <Pressable
+        style={styles.gearIconPressable}
+        onPress={() => router.push("/screens/settings/profile/editprofile")}
+      >
         <MaterialIcons name="settings" size={32} color="#fff" />
       </Pressable>
     </>
@@ -162,9 +184,18 @@ export default function Profile() {
 
 const styles = StyleSheet.create({
   loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
-  noProfileContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
+  noProfileContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   noProfileText: { fontSize: 18, marginBottom: 20 },
-  createProfileButton: { backgroundColor: "black", paddingHorizontal: 16, paddingVertical: 10, borderRadius: 8 },
+  createProfileButton: {
+    backgroundColor: "black",
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
   createProfileText: { color: "white", fontWeight: "600" },
 
   container: { flex: 1, backgroundColor: "#fff" },
@@ -229,8 +260,8 @@ const styles = StyleSheet.create({
   bioContainer: {
     shadowColor: "rgba(66, 66, 66, 0.6)",
     shadowOffset: {
-    width: 0,
-    height: 0
+      width: 0,
+      height: 0,
     },
     shadowRadius: 16,
     elevation: 16,
@@ -269,4 +300,3 @@ const styles = StyleSheet.create({
     backgroundColor: "#ddd",
   },
 });
-
