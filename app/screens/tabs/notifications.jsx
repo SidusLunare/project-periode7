@@ -1,74 +1,55 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, TextInput, Image } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+  TextInput,
+  Image
+} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
-import Toast from "react-native-toast-message";
-import { useRouter } from 'expo-router';
 
 export default function NotificationScreen() {
-  
-  const formatDate = () => {
-    const now = new Date();
-    const day = String(now.getDate()).padStart(2, '0'); 
-    const month = String(now.getMonth() + 1).padStart(2, '0'); 
-    const year = now.getFullYear();
-    const hours = String(now.getHours()).padStart(2, '0'); 
-    const minutes = String(now.getMinutes()).padStart(2, '0'); 
-    const seconds = String(now.getSeconds()).padStart(2, '0'); 
-    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-  };
-  
-  const [notifications, setNotifications] = useState([
-
-  ]);
+  const [notifications, setNotifications] = useState([]);
   const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
   const [text, setText] = useState('');
   const [image, setImage] = useState(null);
 
-  
+  const formatDate = () => {
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  };
 
-const addNotification = () => {
-  if (text.trim() || image) {
-    const newNotification = {
-      id: Date.now().toString(),
-      message: text,
-      image,
-      time: formatDate(), // Get the current date and time
-    };
+  const addNotification = () => {
+    if (text.trim() || image) {
+      const newNotification = {
+        id: Date.now().toString(),
+        message: text,
+        image,
+        time: formatDate(),
+      };
 
-    setNotifications((prev) => [newNotification, ...prev]);
+      setNotifications((prev) => [newNotification, ...prev]);
 
-    // Show the in-app pop-up notification
-    Toast.show({
-      type: 'info',
-      text1: 'New Notification',
-      text2: text,
-      position: 'top',
-      visibilityTime: 3000,
-      autoHide: true,
-      onPress: () => {
-        // Navigate to the NotificationScreen using useRouter
-        router.push('/notifications');  // Make sure your notification page path is correct
-      },
-    });
-
-    setText('');
-    setImage(null);
-  }
-};
-
+      setText('');
+      setImage(null);
+    }
+  };
 
   const removeNotification = (id) => {
     setNotifications((prev) => {
       const removed = prev.find((item) => item.id === id);
-      if (removed) setHistory((hist) => [...hist, removed]); // Add to history (bottom of the history)
-      return prev.filter((notification) => notification.id !== id);
+      if (removed) setHistory((hist) => [...hist, removed]);
+      return prev.filter((item) => item.id !== id);
     });
   };
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
@@ -85,14 +66,16 @@ const addNotification = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>{showHistory ? 'Notifications History' : 'Recent Notifications'}</Text>
+        <Text style={styles.headerText}>
+          {showHistory ? 'Notificatiegeschiedenis' : 'Recente Notificaties'}
+        </Text>
         <TouchableOpacity onPress={() => setShowHistory(!showHistory)}>
           <Ionicons name={showHistory ? 'close' : 'time-outline'} size={24} color="black" />
         </TouchableOpacity>
       </View>
-      
+
       {notifications.length === 0 && !showHistory && (
-        <Text style={styles.emptyMessage}>You're all caught up!</Text>
+        <Text style={styles.emptyMessage}>Je bent helemaal bij!</Text>
       )}
 
       <FlatList
@@ -100,7 +83,9 @@ const addNotification = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.notificationItem}>
-            {item.image && <Image source={{ uri: item.image }} style={styles.notificationImage} />}
+            {item.image && (
+              <Image source={{ uri: item.image }} style={styles.notificationImage} />
+            )}
             <View style={styles.messageContainer}>
               <Text style={styles.messageText}>{item.message}</Text>
               <Text style={styles.timestamp}>{item.time}</Text>
@@ -112,21 +97,22 @@ const addNotification = () => {
             )}
           </View>
         )}
+        contentContainerStyle={{ paddingBottom: 200 }}
       />
 
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Enter notification message"
+          placeholder="Voer notificatie in"
           value={text}
           onChangeText={setText}
         />
         <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
-          <Text>Pick an Image</Text>
+          <Text>Afbeelding kiezen</Text>
         </TouchableOpacity>
         {image && <Image source={{ uri: image }} style={styles.previewImage} />}
         <TouchableOpacity style={styles.sendButton} onPress={addNotification}>
-          <Text style={styles.sendButtonText}>Send Notification</Text>
+          <Text style={styles.sendButtonText}>Notificatie verzenden</Text>
         </TouchableOpacity>
       </View>
     </View>
