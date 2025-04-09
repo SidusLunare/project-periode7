@@ -2,12 +2,6 @@
   {
     "email": "test@gmail.com",
     "password": "test",
-    "hasProfile": true,
-    "coverUrl": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Fproject-periode7-5e29bba1-0a18-43e9-ba46-7466c73484e8/ImagePicker/2aab7333-2e98-40f5-9542-746831a5b037.jpeg",
-    "avatarUrl": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Fproject-periode7-5e29bba1-0a18-43e9-ba46-7466c73484e8/ImagePicker/f25c2e0d-1994-4724-bcdc-84d174162364.jpeg",
-    "name": "hello",
-    "pronouns": "they/them",
-    "favourites": [],
-    "bio": "hello bip bop wieep wyopp"
+    "hasProfile": false
   }
 ]
