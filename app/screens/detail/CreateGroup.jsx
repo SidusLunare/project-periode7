@@ -10,6 +10,7 @@ const CreateGroupScreen = () => {
   const [tags, setTags] = useState('');
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [friends, setFriends] = useState(friendsData); 
+  const [error, setError] = useState(''); // ✅ Foutmelding state toegevoegd
   const router = useRouter();
 
   const saveGroupToStorage = async (newGroup) => {
@@ -25,6 +26,24 @@ const CreateGroupScreen = () => {
   };
 
   const createGroup = () => {
+    const errors = [];
+  
+    if (!groupName.trim()) {
+      errors.push('groepsnaam');
+    }
+    if (!tags.trim()) {
+      errors.push('tags');
+    }
+    if (selectedMembers.length === 0) {
+      errors.push('leden');
+    }
+  
+    if (errors.length > 0) {
+      setError(`Vul de volgende velden in: ${errors.join(', ')}`);
+      return;
+    }
+  
+    setError('');
     const newGroup = {
       id: Date.now().toString(),
       name: groupName,
@@ -33,6 +52,7 @@ const CreateGroupScreen = () => {
     };
     saveGroupToStorage(newGroup);
   };
+  
 
   const toggleMember = (name) => {
     if (selectedMembers.includes(name)) {
@@ -85,6 +105,9 @@ const CreateGroupScreen = () => {
           </TouchableOpacity>
         ))}
       </View>
+
+      {/* ✅ Foutmelding tonen */}
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
       <TouchableOpacity style={styles.button} onPress={createGroup}>
         <Text style={styles.buttonText}>Create Group</Text>
@@ -167,6 +190,13 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    marginTop: 10,
+    marginBottom: -15,
+    textAlign: 'center',
   },
 });
 

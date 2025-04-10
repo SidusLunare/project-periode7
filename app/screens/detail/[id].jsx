@@ -106,30 +106,58 @@ const GroupDetailScreen = () => {
         <Text style={styles.buttonText}>Opslaan</Text>
       </TouchableOpacity>
       
-        <TouchableOpacity
-        style={[styles.button, { backgroundColor: '#ffa500', marginTop: 10 }]}
-        onPress={async () => {
-            const storedGroups = await AsyncStorage.getItem('groups');
-            const groups = storedGroups ? JSON.parse(storedGroups) : [];
-            const updatedGroups = groups.filter(g => g.id !== id); // zelfde gedrag voorlopig
-            await AsyncStorage.setItem('groups', JSON.stringify(updatedGroups));
-            router.push('../tabs/groups');
-        }}
-        >
-        <Text style={styles.buttonText}>Verlaat groep</Text>
-        </TouchableOpacity>
-            <TouchableOpacity
-        style={[styles.button, { backgroundColor: '#ff4d4d' }]}
-        onPress={async () => {
+      <TouchableOpacity
+  style={[styles.button, { backgroundColor: '#ffa500', marginTop: 10 }]}
+  onPress={() => {
+    Alert.alert(
+      'Groep verlaten',
+      'Weet je zeker dat je deze groep wilt verlaten?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Ja, verlaten',
+          style: 'destructive',
+          onPress: async () => {
             const storedGroups = await AsyncStorage.getItem('groups');
             const groups = storedGroups ? JSON.parse(storedGroups) : [];
             const updatedGroups = groups.filter(g => g.id !== id);
             await AsyncStorage.setItem('groups', JSON.stringify(updatedGroups));
             router.push('../tabs/groups');
-        }}
-        >
-        <Text style={styles.buttonText}>Verwijder groep</Text>
-        </TouchableOpacity>
+          },
+        },
+      ]
+    );
+  }}
+>
+  <Text style={styles.buttonText}>Verlaat groep</Text>
+</TouchableOpacity>
+
+<TouchableOpacity
+  style={[styles.button, { backgroundColor: '#ff4d4d' }]}
+  onPress={() => {
+    Alert.alert(
+      'Groep verwijderen',
+      'Weet je zeker dat je deze groep permanent wilt verwijderen?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Ja, verwijderen',
+          style: 'destructive',
+          onPress: async () => {
+            const storedGroups = await AsyncStorage.getItem('groups');
+            const groups = storedGroups ? JSON.parse(storedGroups) : [];
+            const updatedGroups = groups.filter(g => g.id !== id);
+            await AsyncStorage.setItem('groups', JSON.stringify(updatedGroups));
+            router.push('../tabs/groups');
+          },
+        },
+      ]
+    );
+  }}
+>
+  <Text style={styles.buttonText}>Verwijder groep</Text>
+</TouchableOpacity>
+
 
     </ScrollView>
   );
