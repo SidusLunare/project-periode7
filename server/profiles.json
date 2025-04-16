@@ -2,9 +2,6 @@
   {
     "email": "test@gmail.com",
     "password": "test",
-    "hasProfile": true,
-    "coverUrl": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Fproject-periode7-5e29bba1-0a18-43e9-ba46-7466c73484e8/ImagePicker/eb74d902-44b4-40c1-a42b-445ca09f374c.jpeg",
-    "avatarUrl": "https://via.placeholder.com/100"
+    "hasProfile": false
   }
 ]
-

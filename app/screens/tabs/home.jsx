@@ -20,7 +20,7 @@ export default function TripsOverview() {
   const router = useRouter();
   const [trips, setTrips] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [hasProfile, setHasProfile] = useState(true); // default; will be updated
+  const [hasProfile, setHasProfile] = useState(false); // default; will be updated
   const [modalVisible, setModalVisible] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [modalDismissed, setModalDismissed] = useState(false);
