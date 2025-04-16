@@ -1,4 +1,4 @@
-const ENV = "home"; // Change to "production" when deploying
+const ENV = "school"; // Change to "production" when deploying
 
 const CONFIG = {
   school: {

@@ -11,6 +11,7 @@ import {
 import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { SERVER_URL } from "../../../utils/config"; // adapt if needed
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 export default function AddDiaryEntry() {
   const router = useRouter();
@@ -82,6 +83,15 @@ export default function AddDiaryEntry() {
         <Text style={styles.title}>New diary entry</Text>
       </View>
 
+      {/* Location of vacation */}
+      <Text style={styles.label}>Location of vacation</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="e.g. Barcelona"
+        value={location}
+        onChangeText={setLocation}
+      />
+
       {/* Banner image area */}
       <Pressable style={styles.bannerArea} onPress={pickBannerImage}>
         {bannerImage ? (
@@ -92,15 +102,6 @@ export default function AddDiaryEntry() {
           </View>
         )}
       </Pressable>
-
-      {/* Location of vacation */}
-      <Text style={styles.label}>Location of vacation</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="e.g. Barcelona"
-        value={location}
-        onChangeText={setLocation}
-      />
 
       {/* Duration */}
       <Text style={styles.label}>Duration</Text>
@@ -123,7 +124,7 @@ export default function AddDiaryEntry() {
 
       {/* Submit button */}
       <Pressable style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitText}>SUBMIT</Text>
+        <Text style={styles.submitText}>Submit</Text>
       </Pressable>
     </View>
   );
@@ -132,10 +133,12 @@ export default function AddDiaryEntry() {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, backgroundColor: "#fff" },
   headerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    justifyContent: "flex-start",
     marginBottom: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 16,
+    gap: 16,
   },
   title: { fontSize: 20, fontWeight: "bold" },
   closeButton: { fontSize: 18, fontWeight: "bold", color: "#000" },

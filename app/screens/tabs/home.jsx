@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -9,20 +9,26 @@ import {
   StyleSheet,
   Modal,
   Linking,
-  Alert
+  Alert,
 } from "react-native";
-import { useRouter } from "expo-router";
-import { SERVER_URL } from "../../../utils/config";
+import { useRouter, useFocusEffect } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SERVER_URL } from "../../../utils/config.js";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 export default function TripsOverview() {
   const router = useRouter();
   const [trips, setTrips] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [modalVisible, setModalVisible] = useState(false); // initially false until profile check
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasProfile, setHasProfile] = useState(true); // default; will be updated
+  const [modalVisible, setModalVisible] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [modalDismissed, setModalDismissed] = useState(false);
 
-  // Fetch trips
+  // Persisted key for tracking modal dismissal
+  const MODAL_DISMISSED_KEY = "profileModalDismissed";
+
+  // Fetch trips data on mount
   useEffect(() => {
     const fetchTrips = async () => {
       try {
@@ -32,39 +38,58 @@ export default function TripsOverview() {
         setTrips(data);
       } catch (error) {
         console.error(error);
-      } finally {
-        setLoading(false);
       }
     };
     fetchTrips();
   }, []);
 
-  // Fetch profile to determine if modal should be shown
+  // When screen is focused, load profile info and check for modal dismissal flag
+  useFocusEffect(
+    useCallback(() => {
+      const loadProfile = async () => {
+        try {
+          // Check if we've already dismissed the modal
+          const dismissedFlag = await AsyncStorage.getItem(MODAL_DISMISSED_KEY);
+          if (dismissedFlag === "true") {
+            setModalDismissed(true);
+          }
+          const stored = await AsyncStorage.getItem("userProfile");
+          if (!stored) {
+            setHasProfile(false);
+            return;
+          }
+          const localUser = JSON.parse(stored);
+          const response = await fetch(
+            `${SERVER_URL}/profile?email=${localUser.email}`
+          );
+          if (!response.ok) {
+            setHasProfile(false);
+            return;
+          }
+          const serverData = await response.json();
+          setHasProfile(!!serverData.hasProfile);
+        } catch (error) {
+          console.error("Error loading profile:", error);
+          setHasProfile(false);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      loadProfile();
+    }, [])
+  );
+
+  // Control modal visibility.
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const response = await fetch(`${SERVER_URL}/profiles.json`);
-        console.log('Profile fetch response status:', response.status);
-        if (!response.ok) {
-          // Try to read more details if available
-          const errorText = await response.text();
-          throw new Error(`Failed to fetch profile data: ${response.status} ${errorText}`);
-        }
-        const profileData = await response.json();
-        if (profileData.hasProfile == false) {
-          setModalVisible(profileData.hasProfile);
-        } else {
-          setModalVisible(!profileData.hasProfile);
-        }
-      } catch (error) {
-        console.error("Error fetching profile data:", error);
-        // Optionally, default to showing the modal if profile fetch fails
-        setModalVisible(true);
-      }
-    };
-    fetchProfile();
-  }, []);
-  if (loading) {
+    // Show the modal if there is no profile and the modal hasn't been dismissed.
+    if (!isLoading && !hasProfile && !modalDismissed) {
+      setModalVisible(true);
+    } else {
+      setModalVisible(false);
+    }
+  }, [hasProfile, isLoading, modalDismissed]);
+
+  if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" />
@@ -98,23 +123,40 @@ export default function TripsOverview() {
     </View>
   );
 
+  // Function to persist the modal dismissal state
+  const dismissModal = async () => {
+    setModalVisible(false);
+    setModalDismissed(true);
+    try {
+      await AsyncStorage.setItem(MODAL_DISMISSED_KEY, "true");
+    } catch (error) {
+      console.error("Error setting modal dismissed flag:", error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <MaterialIcons name="work" size={32} color="#000" />
         <Text style={styles.header}>My Trips</Text>
       </View>
+
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>
               Welcome to Travel Diary {"\n"}
               Let us show you our key features: {"\n\n"}
-              <MaterialIcons name="home" size={16} /> - Shows you all your saved trips {"\n"}
-              <MaterialIcons name="group" size={16} /> - Manage your own travel groups here {"\n"}
-              <MaterialIcons name="add" size={16} /> - Create your travel diaries here {"\n"}
-              <MaterialIcons name="notifications" size={16} /> - Pings of the people you follow are here {"\n"}
-              <MaterialIcons name="person" size={16} /> - Fill in your profile here{"\n\n"}
+              <MaterialIcons name="home" size={16} /> - Shows you all your saved
+              trips {"\n"}
+              <MaterialIcons name="group" size={16} /> - Manage your own travel
+              groups here {"\n"}
+              <MaterialIcons name="add" size={16} /> - Create your travel
+              diaries here {"\n"}
+              <MaterialIcons name="notifications" size={16} /> - Pings of the
+              people you follow are here {"\n"}
+              <MaterialIcons name="person" size={16} /> - Fill in your profile
+              here{"\n\n"}
             </Text>
 
             {/* Terms and Services Checkbox */}
@@ -131,44 +173,45 @@ export default function TripsOverview() {
                 <Text
                   style={styles.linkText}
                   onPress={() =>
-                    Linking.openURL("https://www.youtube.com/embed/dQw4w9WgXcQ?si=PMBxQdqCPejQL564")
+                    Linking.openURL(
+                      "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                    )
                   }
                 >
-                  Terms & Services
+                  Terms of Services
                 </Text>
               </Text>
             </View>
 
             <View style={styles.buttonContainer}>
               <Pressable
-                style={[
-                  styles.button,
-                  !acceptedTerms && styles.disabledButton
-                ]}
+                style={[styles.button, !acceptedTerms && styles.disabledButton]}
                 disabled={!acceptedTerms}
-                onPress={() => {
+                onPress={async () => {
                   if (acceptedTerms) {
+                    await dismissModal(); // Persist dismissal so modal won't reopen.
                     router.push("/screens/settings/profile/createprofile");
                   } else {
-                    Alert.alert("Notice", "Please accept the Terms & Services first.");
+                    Alert.alert(
+                      "Notice",
+                      "Please accept the Terms of Services first."
+                    );
                   }
                 }}
               >
                 <Text style={styles.modalTextstyle}>Create Profile</Text>
               </Pressable>
-              <Pressable
-                style={styles.skipButton}
-                onPress={() => setModalVisible(false)}
-              >
+              <Pressable style={styles.skipButton} onPress={dismissModal}>
                 <Text style={styles.modalSkipTextstyle}>Skip</Text>
               </Pressable>
             </View>
           </View>
         </View>
       </Modal>
+
       <FlatList
         data={trips}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={renderTripCard}
         showsVerticalScrollIndicator={false}
       />
@@ -178,6 +221,7 @@ export default function TripsOverview() {
 
 const styles = StyleSheet.create({
   loadingContainer: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -185,6 +229,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingHorizontal: 16,
     paddingTop: 20,
+    flex: 1,
   },
   centeredView: {
     flex: 1,
@@ -202,7 +247,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     width: "85%",
-    height: "50%", // Increased to accommodate the new terms section
+    height: "50%",
   },
   modalText: {
     marginBottom: 16,
@@ -211,7 +256,7 @@ const styles = StyleSheet.create({
   termsContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 8,
+    marginBottom: 16,
   },
   termsText: {
     fontSize: 14,
@@ -243,14 +288,10 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    textAlignVertical: "center",
-    width: "100%",
-    height: "100%",
   },
   modalSkipTextstyle: {
     fontWeight: "200",
     textAlign: "center",
-    textAlignVertical: "center",
     fontSize: 12,
   },
   skipButton: {
@@ -266,11 +307,8 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 30,
     fontWeight: "700",
-    fontFamily: "Inter-Bold",
     color: "#000",
     textAlign: "left",
-    width: 138,
-    height: 55,
   },
   card: {
     shadowColor: "rgba(66, 66, 66, 0.6)",
@@ -305,9 +343,7 @@ const styles = StyleSheet.create({
   locationText: {
     fontSize: 15,
     fontWeight: "700",
-    fontFamily: "Inter-Bold",
     color: "#000",
-    textAlign: "left",
     padding: 4,
   },
   dateTextContainer: {
@@ -319,7 +355,6 @@ const styles = StyleSheet.create({
   dateText: {
     fontSize: 10,
     fontWeight: "500",
-    fontFamily: "Inter-Medium",
     color: "#a5a5a5",
   },
 });
